@@ -1,0 +1,15 @@
+syntax = "proto3";
+
+package dicearcade.v1;
+option go_package = "dice-arcade/api/dicearcade/v1;gamemanagerpb";
+
+service GameManager {
+  rpc CreateGame(CreateGameRequest) returns (CreateGameResponse);
+  rpc PlayOnce(PlayOnceRequest) returns (PlayOnceResponse);
+}
+
+message CreateGameRequest { string kind = 1; }   // "highlow" | "pig"
+message CreateGameResponse { string id = 1; string name = 2; }
+
+message PlayOnceRequest { string id = 1; }
+message PlayOnceResponse { string outcome = 1; }
