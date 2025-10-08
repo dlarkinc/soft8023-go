@@ -21,6 +21,7 @@ const _ = grpc.SupportPackageIsVersion9
 const (
 	GameManager_CreateGame_FullMethodName = "/dicearcade.v1.GameManager/CreateGame"
 	GameManager_PlayOnce_FullMethodName   = "/dicearcade.v1.GameManager/PlayOnce"
+	GameManager_GetSummary_FullMethodName = "/dicearcade.v1.GameManager/GetSummary"
 )
 
 // GameManagerClient is the client API for GameManager service.
@@ -29,6 +30,7 @@ const (
 type GameManagerClient interface {
 	CreateGame(ctx context.Context, in *CreateGameRequest, opts ...grpc.CallOption) (*CreateGameResponse, error)
 	PlayOnce(ctx context.Context, in *PlayOnceRequest, opts ...grpc.CallOption) (*PlayOnceResponse, error)
+	GetSummary(ctx context.Context, in *GetSummaryRequest, opts ...grpc.CallOption) (*GameSummaryResponse, error)
 }
 
 type gameManagerClient struct {
@@ -59,12 +61,23 @@ func (c *gameManagerClient) PlayOnce(ctx context.Context, in *PlayOnceRequest, o
 	return out, nil
 }
 
+func (c *gameManagerClient) GetSummary(ctx context.Context, in *GetSummaryRequest, opts ...grpc.CallOption) (*GameSummaryResponse, error) {
+	cOpts := append([]grpc.CallOption{grpc.StaticMethod()}, opts...)
+	out := new(GameSummaryResponse)
+	err := c.cc.Invoke(ctx, GameManager_GetSummary_FullMethodName, in, out, cOpts...)
+	if err != nil {
+		return nil, err
+	}
+	return out, nil
+}
+
 // GameManagerServer is the server API for GameManager service.
 // All implementations must embed UnimplementedGameManagerServer
 // for forward compatibility.
 type GameManagerServer interface {
 	CreateGame(context.Context, *CreateGameRequest) (*CreateGameResponse, error)
 	PlayOnce(context.Context, *PlayOnceRequest) (*PlayOnceResponse, error)
+	GetSummary(context.Context, *GetSummaryRequest) (*GameSummaryResponse, error)
 	mustEmbedUnimplementedGameManagerServer()
 }
 
@@ -80,6 +93,9 @@ func (UnimplementedGameManagerServer) CreateGame(context.Context, *CreateGameReq
 }
 func (UnimplementedGameManagerServer) PlayOnce(context.Context, *PlayOnceRequest) (*PlayOnceResponse, error) {
 	return nil, status.Errorf(codes.Unimplemented, "method PlayOnce not implemented")
+}
+func (UnimplementedGameManagerServer) GetSummary(context.Context, *GetSummaryRequest) (*GameSummaryResponse, error) {
+	return nil, status.Errorf(codes.Unimplemented, "method GetSummary not implemented")
 }
 func (UnimplementedGameManagerServer) mustEmbedUnimplementedGameManagerServer() {}
 func (UnimplementedGameManagerServer) testEmbeddedByValue()                     {}
@@ -138,6 +154,24 @@ func _GameManager_PlayOnce_Handler(srv interface{}, ctx context.Context, dec fun
 	return interceptor(ctx, in, info, handler)
 }
 
+func _GameManager_GetSummary_Handler(srv interface{}, ctx context.Context, dec func(interface{}) error, interceptor grpc.UnaryServerInterceptor) (interface{}, error) {
+	in := new(GetSummaryRequest)
+	if err := dec(in); err != nil {
+		return nil, err
+	}
+	if interceptor == nil {
+		return srv.(GameManagerServer).GetSummary(ctx, in)
+	}
+	info := &grpc.UnaryServerInfo{
+		Server:     srv,
+		FullMethod: GameManager_GetSummary_FullMethodName,
+	}
+	handler := func(ctx context.Context, req interface{}) (interface{}, error) {
+		return srv.(GameManagerServer).GetSummary(ctx, req.(*GetSummaryRequest))
+	}
+	return interceptor(ctx, in, info, handler)
+}
+
 // GameManager_ServiceDesc is the grpc.ServiceDesc for GameManager service.
 // It's only intended for direct use with grpc.RegisterService,
 // and not to be introspected or modified (even as a copy)
@@ -152,6 +186,10 @@ var GameManager_ServiceDesc = grpc.ServiceDesc{
 		{
 			MethodName: "PlayOnce",
 			Handler:    _GameManager_PlayOnce_Handler,
+		},
+		{
+			MethodName: "GetSummary",
+			Handler:    _GameManager_GetSummary_Handler,
 		},
 	},
 	Streams:  []grpc.StreamDesc{},

@@ -44,4 +44,19 @@ func main() {
 	}
 
 	fmt.Printf("[%s] %s\n", cr.GetId(), pr.GetOutcome())
+
+	ctx2, cancel2 := context.WithTimeout(context.Background(), 3*time.Second)
+	defer cancel2()
+
+	sum, err := client.GetSummary(ctx2, &gamemanagerpb.GetSummaryRequest{Id: cr.GetId()})
+	if err != nil {
+		panic(err)
+	}
+
+	fmt.Printf("Summary for %s (%s):\n", sum.GetGameId(), sum.GetGameName())
+	for _, r := range sum.GetRolls() {
+		fmt.Printf("  Roll %d: %d → %s\n", r.GetRollNumber(), r.GetValue(), r.GetOutcome())
+	}
+	fmt.Printf("Total rolls: %d, Wins: %d\n", sum.GetTotalRolls(), sum.GetTotalWins())
+
 }

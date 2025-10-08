@@ -42,3 +42,8 @@ func (p *ClientProxy) PlayOnce(ctx context.Context, req *gamemanagerpb.PlayOnceR
 	p.throttle()
 	return p.Inner.PlayOnce(ctx, req /* opts... */)
 }
+
+func (p *ClientProxy) GetSummary(ctx context.Context, req *gamemanagerpb.GetSummaryRequest, opts ...interface{}) (*gamemanagerpb.GameSummaryResponse, error) {
+	p.throttle()
+	return p.Inner.GetSummary(ctx, req /* opts... */)
+}

@@ -32,6 +32,22 @@ func (s *server) PlayOnce(ctx context.Context, req *gamemanagerpb.PlayOnceReques
 	return &gamemanagerpb.PlayOnceResponse{Outcome: g.PlayOnce()}, nil
 }
 
+func (s *server) GetSummary(ctx context.Context, req *gamemanagerpb.GetSummaryRequest) (*gamemanagerpb.GameSummaryResponse, error) {
+	// Fake data for demo purposes
+	summary := &gamemanagerpb.GameSummaryResponse{
+		GameId:   req.GetId(),
+		GameName: "highlow",
+		Rolls: []*gamemanagerpb.GameSummaryResponse_RollResult{
+			{RollNumber: 1, Value: 5, Outcome: gamemanagerpb.Outcome_OUTCOME_WIN},
+			{RollNumber: 2, Value: 3, Outcome: gamemanagerpb.Outcome_OUTCOME_LOSE},
+			{RollNumber: 3, Value: 6, Outcome: gamemanagerpb.Outcome_OUTCOME_WIN},
+		},
+		TotalRolls: 3,
+		TotalWins:  2,
+	}
+	return summary, nil
+}
+
 func main() {
 	lis, err := net.Listen("tcp", ":50051")
 	if err != nil {

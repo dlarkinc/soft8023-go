@@ -21,6 +21,59 @@ const (
 	_ = protoimpl.EnforceVersion(protoimpl.MaxVersion - 20)
 )
 
+// Enum used by RollResult
+type Outcome int32
+
+const (
+	Outcome_OUTCOME_UNSPECIFIED Outcome = 0
+	Outcome_OUTCOME_WIN         Outcome = 1
+	Outcome_OUTCOME_LOSE        Outcome = 2
+	Outcome_OUTCOME_BUST        Outcome = 3
+)
+
+// Enum value maps for Outcome.
+var (
+	Outcome_name = map[int32]string{
+		0: "OUTCOME_UNSPECIFIED",
+		1: "OUTCOME_WIN",
+		2: "OUTCOME_LOSE",
+		3: "OUTCOME_BUST",
+	}
+	Outcome_value = map[string]int32{
+		"OUTCOME_UNSPECIFIED": 0,
+		"OUTCOME_WIN":         1,
+		"OUTCOME_LOSE":        2,
+		"OUTCOME_BUST":        3,
+	}
+)
+
+func (x Outcome) Enum() *Outcome {
+	p := new(Outcome)
+	*p = x
+	return p
+}
+
+func (x Outcome) String() string {
+	return protoimpl.X.EnumStringOf(x.Descriptor(), protoreflect.EnumNumber(x))
+}
+
+func (Outcome) Descriptor() protoreflect.EnumDescriptor {
+	return file_api_dicearcade_v1_gamemanager_proto_enumTypes[0].Descriptor()
+}
+
+func (Outcome) Type() protoreflect.EnumType {
+	return &file_api_dicearcade_v1_gamemanager_proto_enumTypes[0]
+}
+
+func (x Outcome) Number() protoreflect.EnumNumber {
+	return protoreflect.EnumNumber(x)
+}
+
+// Deprecated: Use Outcome.Descriptor instead.
+func (Outcome) EnumDescriptor() ([]byte, []int) {
+	return file_api_dicearcade_v1_gamemanager_proto_rawDescGZIP(), []int{0}
+}
+
 type CreateGameRequest struct {
 	state         protoimpl.MessageState `protogen:"open.v1"`
 	Kind          string                 `protobuf:"bytes,1,opt,name=kind,proto3" json:"kind,omitempty"`
@@ -205,6 +258,191 @@ func (x *PlayOnceResponse) GetOutcome() string {
 	return ""
 }
 
+// Request a summary for a specific game
+type GetSummaryRequest struct {
+	state         protoimpl.MessageState `protogen:"open.v1"`
+	Id            string                 `protobuf:"bytes,1,opt,name=id,proto3" json:"id,omitempty"`
+	unknownFields protoimpl.UnknownFields
+	sizeCache     protoimpl.SizeCache
+}
+
+func (x *GetSummaryRequest) Reset() {
+	*x = GetSummaryRequest{}
+	mi := &file_api_dicearcade_v1_gamemanager_proto_msgTypes[4]
+	ms := protoimpl.X.MessageStateOf(protoimpl.Pointer(x))
+	ms.StoreMessageInfo(mi)
+}
+
+func (x *GetSummaryRequest) String() string {
+	return protoimpl.X.MessageStringOf(x)
+}
+
+func (*GetSummaryRequest) ProtoMessage() {}
+
+func (x *GetSummaryRequest) ProtoReflect() protoreflect.Message {
+	mi := &file_api_dicearcade_v1_gamemanager_proto_msgTypes[4]
+	if x != nil {
+		ms := protoimpl.X.MessageStateOf(protoimpl.Pointer(x))
+		if ms.LoadMessageInfo() == nil {
+			ms.StoreMessageInfo(mi)
+		}
+		return ms
+	}
+	return mi.MessageOf(x)
+}
+
+// Deprecated: Use GetSummaryRequest.ProtoReflect.Descriptor instead.
+func (*GetSummaryRequest) Descriptor() ([]byte, []int) {
+	return file_api_dicearcade_v1_gamemanager_proto_rawDescGZIP(), []int{4}
+}
+
+func (x *GetSummaryRequest) GetId() string {
+	if x != nil {
+		return x.Id
+	}
+	return ""
+}
+
+// GameSummaryResponse contains a list of all rolls for a given game
+type GameSummaryResponse struct {
+	state    protoimpl.MessageState `protogen:"open.v1"`
+	GameId   string                 `protobuf:"bytes,1,opt,name=game_id,json=gameId,proto3" json:"game_id,omitempty"`
+	GameName string                 `protobuf:"bytes,2,opt,name=game_name,json=gameName,proto3" json:"game_name,omitempty"`
+	// Repeated (list) of nested messages
+	Rolls []*GameSummaryResponse_RollResult `protobuf:"bytes,3,rep,name=rolls,proto3" json:"rolls,omitempty"`
+	// Optional aggregate info
+	TotalRolls    int32 `protobuf:"varint,4,opt,name=total_rolls,json=totalRolls,proto3" json:"total_rolls,omitempty"`
+	TotalWins     int32 `protobuf:"varint,5,opt,name=total_wins,json=totalWins,proto3" json:"total_wins,omitempty"`
+	unknownFields protoimpl.UnknownFields
+	sizeCache     protoimpl.SizeCache
+}
+
+func (x *GameSummaryResponse) Reset() {
+	*x = GameSummaryResponse{}
+	mi := &file_api_dicearcade_v1_gamemanager_proto_msgTypes[5]
+	ms := protoimpl.X.MessageStateOf(protoimpl.Pointer(x))
+	ms.StoreMessageInfo(mi)
+}
+
+func (x *GameSummaryResponse) String() string {
+	return protoimpl.X.MessageStringOf(x)
+}
+
+func (*GameSummaryResponse) ProtoMessage() {}
+
+func (x *GameSummaryResponse) ProtoReflect() protoreflect.Message {
+	mi := &file_api_dicearcade_v1_gamemanager_proto_msgTypes[5]
+	if x != nil {
+		ms := protoimpl.X.MessageStateOf(protoimpl.Pointer(x))
+		if ms.LoadMessageInfo() == nil {
+			ms.StoreMessageInfo(mi)
+		}
+		return ms
+	}
+	return mi.MessageOf(x)
+}
+
+// Deprecated: Use GameSummaryResponse.ProtoReflect.Descriptor instead.
+func (*GameSummaryResponse) Descriptor() ([]byte, []int) {
+	return file_api_dicearcade_v1_gamemanager_proto_rawDescGZIP(), []int{5}
+}
+
+func (x *GameSummaryResponse) GetGameId() string {
+	if x != nil {
+		return x.GameId
+	}
+	return ""
+}
+
+func (x *GameSummaryResponse) GetGameName() string {
+	if x != nil {
+		return x.GameName
+	}
+	return ""
+}
+
+func (x *GameSummaryResponse) GetRolls() []*GameSummaryResponse_RollResult {
+	if x != nil {
+		return x.Rolls
+	}
+	return nil
+}
+
+func (x *GameSummaryResponse) GetTotalRolls() int32 {
+	if x != nil {
+		return x.TotalRolls
+	}
+	return 0
+}
+
+func (x *GameSummaryResponse) GetTotalWins() int32 {
+	if x != nil {
+		return x.TotalWins
+	}
+	return 0
+}
+
+// Nested message: describes a single roll
+type GameSummaryResponse_RollResult struct {
+	state         protoimpl.MessageState `protogen:"open.v1"`
+	RollNumber    int32                  `protobuf:"varint,1,opt,name=roll_number,json=rollNumber,proto3" json:"roll_number,omitempty"`
+	Value         int32                  `protobuf:"varint,2,opt,name=value,proto3" json:"value,omitempty"`
+	Outcome       Outcome                `protobuf:"varint,3,opt,name=outcome,proto3,enum=dicearcade.v1.Outcome" json:"outcome,omitempty"` // Enum below
+	unknownFields protoimpl.UnknownFields
+	sizeCache     protoimpl.SizeCache
+}
+
+func (x *GameSummaryResponse_RollResult) Reset() {
+	*x = GameSummaryResponse_RollResult{}
+	mi := &file_api_dicearcade_v1_gamemanager_proto_msgTypes[6]
+	ms := protoimpl.X.MessageStateOf(protoimpl.Pointer(x))
+	ms.StoreMessageInfo(mi)
+}
+
+func (x *GameSummaryResponse_RollResult) String() string {
+	return protoimpl.X.MessageStringOf(x)
+}
+
+func (*GameSummaryResponse_RollResult) ProtoMessage() {}
+
+func (x *GameSummaryResponse_RollResult) ProtoReflect() protoreflect.Message {
+	mi := &file_api_dicearcade_v1_gamemanager_proto_msgTypes[6]
+	if x != nil {
+		ms := protoimpl.X.MessageStateOf(protoimpl.Pointer(x))
+		if ms.LoadMessageInfo() == nil {
+			ms.StoreMessageInfo(mi)
+		}
+		return ms
+	}
+	return mi.MessageOf(x)
+}
+
+// Deprecated: Use GameSummaryResponse_RollResult.ProtoReflect.Descriptor instead.
+func (*GameSummaryResponse_RollResult) Descriptor() ([]byte, []int) {
+	return file_api_dicearcade_v1_gamemanager_proto_rawDescGZIP(), []int{5, 0}
+}
+
+func (x *GameSummaryResponse_RollResult) GetRollNumber() int32 {
+	if x != nil {
+		return x.RollNumber
+	}
+	return 0
+}
+
+func (x *GameSummaryResponse_RollResult) GetValue() int32 {
+	if x != nil {
+		return x.Value
+	}
+	return 0
+}
+
+func (x *GameSummaryResponse_RollResult) GetOutcome() Outcome {
+	if x != nil {
+		return x.Outcome
+	}
+	return Outcome_OUTCOME_UNSPECIFIED
+}
+
 var File_api_dicearcade_v1_gamemanager_proto protoreflect.FileDescriptor
 
 const file_api_dicearcade_v1_gamemanager_proto_rawDesc = "" +
@@ -218,11 +456,34 @@ const file_api_dicearcade_v1_gamemanager_proto_rawDesc = "" +
 	"\x0fPlayOnceRequest\x12\x0e\n" +
 	"\x02id\x18\x01 \x01(\tR\x02id\",\n" +
 	"\x10PlayOnceResponse\x12\x18\n" +
-	"\aoutcome\x18\x01 \x01(\tR\aoutcome2\xad\x01\n" +
+	"\aoutcome\x18\x01 \x01(\tR\aoutcome\"#\n" +
+	"\x11GetSummaryRequest\x12\x0e\n" +
+	"\x02id\x18\x01 \x01(\tR\x02id\"\xc7\x02\n" +
+	"\x13GameSummaryResponse\x12\x17\n" +
+	"\agame_id\x18\x01 \x01(\tR\x06gameId\x12\x1b\n" +
+	"\tgame_name\x18\x02 \x01(\tR\bgameName\x12C\n" +
+	"\x05rolls\x18\x03 \x03(\v2-.dicearcade.v1.GameSummaryResponse.RollResultR\x05rolls\x12\x1f\n" +
+	"\vtotal_rolls\x18\x04 \x01(\x05R\n" +
+	"totalRolls\x12\x1d\n" +
+	"\n" +
+	"total_wins\x18\x05 \x01(\x05R\ttotalWins\x1au\n" +
+	"\n" +
+	"RollResult\x12\x1f\n" +
+	"\vroll_number\x18\x01 \x01(\x05R\n" +
+	"rollNumber\x12\x14\n" +
+	"\x05value\x18\x02 \x01(\x05R\x05value\x120\n" +
+	"\aoutcome\x18\x03 \x01(\x0e2\x16.dicearcade.v1.OutcomeR\aoutcome*W\n" +
+	"\aOutcome\x12\x17\n" +
+	"\x13OUTCOME_UNSPECIFIED\x10\x00\x12\x0f\n" +
+	"\vOUTCOME_WIN\x10\x01\x12\x10\n" +
+	"\fOUTCOME_LOSE\x10\x02\x12\x10\n" +
+	"\fOUTCOME_BUST\x10\x032\x81\x02\n" +
 	"\vGameManager\x12Q\n" +
 	"\n" +
 	"CreateGame\x12 .dicearcade.v1.CreateGameRequest\x1a!.dicearcade.v1.CreateGameResponse\x12K\n" +
-	"\bPlayOnce\x12\x1e.dicearcade.v1.PlayOnceRequest\x1a\x1f.dicearcade.v1.PlayOnceResponseB-Z+dice-arcade/api/dicearcade/v1;gamemanagerpbb\x06proto3"
+	"\bPlayOnce\x12\x1e.dicearcade.v1.PlayOnceRequest\x1a\x1f.dicearcade.v1.PlayOnceResponse\x12R\n" +
+	"\n" +
+	"GetSummary\x12 .dicearcade.v1.GetSummaryRequest\x1a\".dicearcade.v1.GameSummaryResponseB-Z+dice-arcade/api/dicearcade/v1;gamemanagerpbb\x06proto3"
 
 var (
 	file_api_dicearcade_v1_gamemanager_proto_rawDescOnce sync.Once
@@ -236,23 +497,32 @@ func file_api_dicearcade_v1_gamemanager_proto_rawDescGZIP() []byte {
 	return file_api_dicearcade_v1_gamemanager_proto_rawDescData
 }
 
-var file_api_dicearcade_v1_gamemanager_proto_msgTypes = make([]protoimpl.MessageInfo, 4)
+var file_api_dicearcade_v1_gamemanager_proto_enumTypes = make([]protoimpl.EnumInfo, 1)
+var file_api_dicearcade_v1_gamemanager_proto_msgTypes = make([]protoimpl.MessageInfo, 7)
 var file_api_dicearcade_v1_gamemanager_proto_goTypes = []any{
-	(*CreateGameRequest)(nil),  // 0: dicearcade.v1.CreateGameRequest
-	(*CreateGameResponse)(nil), // 1: dicearcade.v1.CreateGameResponse
-	(*PlayOnceRequest)(nil),    // 2: dicearcade.v1.PlayOnceRequest
-	(*PlayOnceResponse)(nil),   // 3: dicearcade.v1.PlayOnceResponse
+	(Outcome)(0),                           // 0: dicearcade.v1.Outcome
+	(*CreateGameRequest)(nil),              // 1: dicearcade.v1.CreateGameRequest
+	(*CreateGameResponse)(nil),             // 2: dicearcade.v1.CreateGameResponse
+	(*PlayOnceRequest)(nil),                // 3: dicearcade.v1.PlayOnceRequest
+	(*PlayOnceResponse)(nil),               // 4: dicearcade.v1.PlayOnceResponse
+	(*GetSummaryRequest)(nil),              // 5: dicearcade.v1.GetSummaryRequest
+	(*GameSummaryResponse)(nil),            // 6: dicearcade.v1.GameSummaryResponse
+	(*GameSummaryResponse_RollResult)(nil), // 7: dicearcade.v1.GameSummaryResponse.RollResult
 }
 var file_api_dicearcade_v1_gamemanager_proto_depIdxs = []int32{
-	0, // 0: dicearcade.v1.GameManager.CreateGame:input_type -> dicearcade.v1.CreateGameRequest
-	2, // 1: dicearcade.v1.GameManager.PlayOnce:input_type -> dicearcade.v1.PlayOnceRequest
-	1, // 2: dicearcade.v1.GameManager.CreateGame:output_type -> dicearcade.v1.CreateGameResponse
-	3, // 3: dicearcade.v1.GameManager.PlayOnce:output_type -> dicearcade.v1.PlayOnceResponse
-	2, // [2:4] is the sub-list for method output_type
-	0, // [0:2] is the sub-list for method input_type
-	0, // [0:0] is the sub-list for extension type_name
-	0, // [0:0] is the sub-list for extension extendee
-	0, // [0:0] is the sub-list for field type_name
+	7, // 0: dicearcade.v1.GameSummaryResponse.rolls:type_name -> dicearcade.v1.GameSummaryResponse.RollResult
+	0, // 1: dicearcade.v1.GameSummaryResponse.RollResult.outcome:type_name -> dicearcade.v1.Outcome
+	1, // 2: dicearcade.v1.GameManager.CreateGame:input_type -> dicearcade.v1.CreateGameRequest
+	3, // 3: dicearcade.v1.GameManager.PlayOnce:input_type -> dicearcade.v1.PlayOnceRequest
+	5, // 4: dicearcade.v1.GameManager.GetSummary:input_type -> dicearcade.v1.GetSummaryRequest
+	2, // 5: dicearcade.v1.GameManager.CreateGame:output_type -> dicearcade.v1.CreateGameResponse
+	4, // 6: dicearcade.v1.GameManager.PlayOnce:output_type -> dicearcade.v1.PlayOnceResponse
+	6, // 7: dicearcade.v1.GameManager.GetSummary:output_type -> dicearcade.v1.GameSummaryResponse
+	5, // [5:8] is the sub-list for method output_type
+	2, // [2:5] is the sub-list for method input_type
+	2, // [2:2] is the sub-list for extension type_name
+	2, // [2:2] is the sub-list for extension extendee
+	0, // [0:2] is the sub-list for field type_name
 }
 
 func init() { file_api_dicearcade_v1_gamemanager_proto_init() }
@@ -265,13 +535,14 @@ func file_api_dicearcade_v1_gamemanager_proto_init() {
 		File: protoimpl.DescBuilder{
 			GoPackagePath: reflect.TypeOf(x{}).PkgPath(),
 			RawDescriptor: unsafe.Slice(unsafe.StringData(file_api_dicearcade_v1_gamemanager_proto_rawDesc), len(file_api_dicearcade_v1_gamemanager_proto_rawDesc)),
-			NumEnums:      0,
-			NumMessages:   4,
+			NumEnums:      1,
+			NumMessages:   7,
 			NumExtensions: 0,
 			NumServices:   1,
 		},
 		GoTypes:           file_api_dicearcade_v1_gamemanager_proto_goTypes,
 		DependencyIndexes: file_api_dicearcade_v1_gamemanager_proto_depIdxs,
+		EnumInfos:         file_api_dicearcade_v1_gamemanager_proto_enumTypes,
 		MessageInfos:      file_api_dicearcade_v1_gamemanager_proto_msgTypes,
 	}.Build()
 	File_api_dicearcade_v1_gamemanager_proto = out.File
