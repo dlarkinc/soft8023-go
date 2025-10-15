@@ -1,0 +1,81 @@
+syntax = "proto3";
+
+package dicearcade.v1;
+option go_package = "dice-arcade/api/dicearcade/v1;gamemanagerpb";
+
+service GameManager {
+  rpc CreateGame(CreateGameRequest) returns (CreateGameResponse);
+  rpc PlayOnce(PlayOnceRequest) returns (PlayOnceResponse);
+  rpc GetSummary(GetSummaryRequest) returns (GameSummaryResponse);
+
+  rpc JoinGame(JoinGameRequest) returns (JoinGameResponse);
+  rpc PlayTurn(PlayTurnRequest) returns (PlayTurnResponse);
+  rpc GetGameState(GetGameStateRequest) returns (GetGameStateResponse);
+
+}
+
+message CreateGameRequest { string kind = 1; }   // "highlow" | "pig"
+message CreateGameResponse { string id = 1; string name = 2; }
+
+message PlayOnceRequest { string id = 1; }
+message PlayOnceResponse { string outcome = 1; }
+
+// Request a summary for a specific game
+message GetSummaryRequest {
+  string id = 1;
+}
+
+// GameSummaryResponse contains a list of all rolls for a given game
+message GameSummaryResponse {
+  string game_id = 1;
+  string game_name = 2;
+
+  // Nested message: describes a single roll
+  message RollResult {
+    int32 roll_number = 1;
+    int32 value = 2;
+    Outcome outcome = 3; // Enum below
+  }
+
+  // Repeated (list) of nested messages
+  repeated RollResult rolls = 3;
+
+  // Optional aggregate info
+  int32 total_rolls = 4;
+  int32 total_wins = 5;
+}
+
+// Enum used by RollResult
+enum Outcome {
+  OUTCOME_UNSPECIFIED = 0;
+  OUTCOME_WIN = 1;
+  OUTCOME_LOSE = 2;
+  OUTCOME_BUST = 3;
+}
+
+message JoinGameRequest {
+  string id = 1;         // game ID
+  string player_id = 2;  // caller-chosen ID (e.g., "alice")
+}
+message JoinGameResponse {
+  repeated string players = 1; // current players in join order
+  int32 your_index = 2;        // your position in the turn order
+}
+
+message PlayTurnRequest {
+  string id = 1;         // game ID
+  string player_id = 2;  // who is trying to play
+}
+message PlayTurnResponse {
+  string outcome = 1;          // e.g., "HighLow: rolled 5 → WIN"
+  string next_player_id = 2;   // who goes next
+}
+
+message GetGameStateRequest {
+  string id = 1;
+}
+message GetGameStateResponse {
+  repeated string players = 1;
+  string current_player_id = 2; // whose turn
+  string game_name = 3;
+}
